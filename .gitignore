@@ -216,3 +216,19 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local environment variants
+.env.*
+!.env.example
+
+# IDE settings
+.vscode/
+.idea/
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
+
+# Local databases (we'll use these later)
+*.sqlite3
+*.db
