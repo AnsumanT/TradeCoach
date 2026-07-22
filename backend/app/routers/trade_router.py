@@ -30,7 +30,15 @@ def get_coach():
     trades = trade_service.get_trades()
     return CoachService.generate(trades)
 
-@router.get("/ai-coach")
+@router.post("/ai-coach")
 def ai_coach():
     trades = trade_service.get_trades()
     return AICoachService.generate(trades)
+
+@router.get("/charts")
+def get_charts():
+    trades = trade_service.get_trades()   # Use the same method your analytics endpoint uses
+    return {
+        "equityCurve": AnalyticsService.get_equity_curve(trades),
+        "winLoss": AnalyticsService.get_win_loss_chart(trades)
+    }

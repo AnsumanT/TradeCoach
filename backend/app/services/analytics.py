@@ -54,3 +54,30 @@ class AnalyticsService:
             average_loss=round(average_loss, 2),
             profit_factor=round(profit_factor, 2),
         )
+    
+    @staticmethod
+    def get_equity_curve(trades: list[Trade]):
+
+        equity = 0
+        curve = []
+
+        for index, trade in enumerate(trades, start=1):
+            equity += trade.pnl
+
+            curve.append({
+                "trade": index,
+                "equity": round(equity, 2)
+            })
+
+        return curve
+    
+    @staticmethod
+    def get_win_loss_chart(trades: list[Trade]):
+
+        wins = len([t for t in trades if t.pnl > 0])
+        losses = len([t for t in trades if t.pnl < 0])
+
+        return {
+            "wins": wins,
+            "losses": losses
+        }

@@ -12,10 +12,23 @@ class TradeService:
 
         orders = response.get("result", [])
 
-        trades = [
-            TradeMapper.from_delta_order(order)
-            for order in orders
-            if order.get("state") == "closed"
-        ]
+        trades = []
+
+        for order in orders:
+
+            # Ignore everything except completed trades
+            if order.get("state") != "closed":
+                continue
+
+            # Ignore cancelled TP/SL bracket orders (extra safety)
+            if (
+                order.get("bracket_order")
+                and order.get("state") == "cancelled"
+            ):
+                continue
+
+            trades.append(
+                TradeMapper.from_delta_order(order)
+            )
 
         return trades

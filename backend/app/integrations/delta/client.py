@@ -16,10 +16,6 @@ class DeltaClient:
         query_string: str = "",
         payload: str = "",
     ):
-        """
-        Generic request method for Delta Exchange.
-        """
-
         headers = get_headers(
             method=method,
             path=endpoint,
@@ -43,9 +39,6 @@ class DeltaClient:
         print("RESPONSE    :", response.text)
         print("=" * 60)
 
-        if response.status_code >= 400:
-            return response.json()
-
         return response.json()
 
     def get_products(self):
@@ -59,13 +52,48 @@ class DeltaClient:
             method="GET",
             endpoint="/v2/positions",
         )
-    
+
     def get_order_history(self):
-        return self.request(
-            method="GET",
-            endpoint="/v2/orders/history",
-            query_string="page_size=100",
-        )
+        """
+        Fetch ALL order history using Delta pagination.
+        """
+
+        all_orders = []
+        after = None
+
+        while True:
+            query = "page_size=100"
+
+            if after:
+                query += f"&after={after}"
+
+            response = self.request(
+                method="GET",
+                endpoint="/v2/orders/history",
+                query_string=query,
+            )
+
+            if not response.get("success"):
+                break
+
+            orders = response.get("result", [])
+
+            if not orders:
+                break
+
+            all_orders.extend(orders)
+
+            after = response.get("meta", {}).get("after")
+
+            print(f"Fetched {len(orders)} orders. Total = {len(all_orders)}")
+
+            if not after:
+                break
+
+        return {
+            "success": True,
+            "result": all_orders,
+        }
 
     def get_fills(self):
         return self.request(
