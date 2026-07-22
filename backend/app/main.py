@@ -2,11 +2,14 @@ from fastapi import FastAPI
 
 from app.config.settings import settings
 from app.routers.trades import router as trades_router
+from app.routers.trade_router import router as trade_router
 
 app = FastAPI(
     title="TradeCoach API",
     version="1.0.0"
 )
+
+app.include_router(trade_router)
 
 app.include_router(trades_router)
 

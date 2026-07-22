@@ -29,7 +29,7 @@ Unlike traditional trading journals, TradeCoach automatically imports trading hi
 
 ### AI
 
-- OpenAI API _(planned)_
+- Gemini API _(planned)_
 
 ### Database
 

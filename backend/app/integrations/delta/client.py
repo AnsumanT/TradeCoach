@@ -32,14 +32,6 @@ class DeltaClient:
         if query_string:
             url = f"{url}?{query_string}"
 
-        # Temporary debug logs
-        print("=" * 60)
-        print("METHOD      :", method)
-        print("URL         :", url)
-        print("HEADERS     :", headers)
-        print("PAYLOAD     :", payload)
-        print("=" * 60)
-
         response = self.client.request(
             method=method,
             url=url,
